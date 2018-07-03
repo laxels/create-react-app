@@ -19,3 +19,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Stylus output
+/src/**/*.css
+
+# CoffeeScript output
+/src/**/*.js
+
+# Include external files
+!/src/external/*
+
+# VIM swap files
+*.swp

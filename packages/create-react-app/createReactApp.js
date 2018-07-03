@@ -444,6 +444,9 @@ function getPackageName(installPackage) {
         if (/^http/.test(installPackage)) {
           stream = hyperquest(installPackage);
         } else {
+          if (installPackage.match(/^file:(.*)?$/)) {
+            installPackage = installPackage.match(/^file:(.*)?$/)[1];
+          }
           stream = fs.createReadStream(installPackage);
         }
         return extractStream(stream, obj.tmpdir).then(() => obj);
@@ -481,7 +484,10 @@ function getPackageName(installPackage) {
     );
   } else if (installPackage.match(/^file:/)) {
     const installPackagePath = installPackage.match(/^file:(.*)?$/)[1];
-    const installPackageJson = require(path.join(installPackagePath, 'package.json'));
+    const installPackageJson = require(path.join(
+      installPackagePath,
+      'package.json'
+    ));
     return Promise.resolve(installPackageJson.name);
   }
   return Promise.resolve(installPackage);

@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "body-parser": "",
+    "coffeescript": "",
+    "express": "",
+    "moment": "",
+    "nib": "",
+    "nodemon": "",
+    "npm-run-all": "",
+    "react-router-dom": "",
+    "rupture": "",
+    "shortid": "",
+    "stylus": ""
+  }
+}

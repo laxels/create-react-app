@@ -1,6 +1,6 @@
 {
   "name": "@laxels/react-scripts",
-  "version": "1.1.5",
+  "version": "1.1.12",
   "description": "Configuration and scripts for Create React App, modified for better ESLint customization.",
   "repository": "laxels/create-react-app",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "config",
     "scripts",
     "template",
-    "utils"
+    "!*.swp"
   ],
   "bin": {
     "react-scripts": "./bin/react-scripts.js"

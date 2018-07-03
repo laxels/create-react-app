@@ -32,13 +32,22 @@ module.exports = function(
   const appPackage = require(path.join(appPath, 'package.json'));
   const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 
+  appPackage.proxy = 'http://localhost:3001';
+
   // Copy over some of the devDependencies
   appPackage.dependencies = appPackage.dependencies || {};
 
   // Setup the script rules
   appPackage.scripts = {
-    start: 'react-scripts start',
-    build: 'react-scripts build',
+    'api-server': 'nodemon server/index.coffee',
+    'watch-coffee': 'coffee --watch --compile src/',
+    'watch-stylus': 'stylus src/ --watch --use nib --use rupture',
+    'start-js': 'react-scripts start',
+    start: 'npm-run-all -p api-server watch-coffee watch-stylus start-js',
+    'build-coffee': 'coffee --compile src/',
+    'build-stylus': 'stylus src/ --use nib --use rupture',
+    'build-js': 'react-scripts build',
+    build: 'npm-run-all -p build-coffee build-stylus -s build-js',
     test: 'react-scripts test --env=jsdom',
     eject: 'react-scripts eject',
   };
@@ -91,6 +100,7 @@ module.exports = function(
 
   let command;
   let args;
+  let installDeps;
 
   if (useYarn) {
     command = 'yarnpkg';
@@ -99,7 +109,10 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom');
+  if (!isReactInstalled(appPackage) || template) {
+    args.push('react', 'react-dom');
+    installDeps = true;
+  }
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
@@ -108,8 +121,10 @@ module.exports = function(
   );
   if (fs.existsSync(templateDependenciesPath)) {
     const templateDependencies = require(templateDependenciesPath).dependencies;
+    const keys = Object.keys(templateDependencies);
+    if (keys.length) installDeps = true;
     args = args.concat(
-      Object.keys(templateDependencies).map(key => {
+      keys.map(key => {
         return `${key}@${templateDependencies[key]}`;
       })
     );
@@ -119,7 +134,7 @@ module.exports = function(
   // Install react and react-dom for backward compatibility with old CRA cli
   // which doesn't install react and react-dom along with react-scripts
   // or template is presetend (via --internal-testing-template)
-  if (!isReactInstalled(appPackage) || template) {
+  if (installDeps) {
     console.log(`Installing react and react-dom using ${command}...`);
     console.log();
 

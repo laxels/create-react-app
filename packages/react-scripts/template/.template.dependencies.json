@@ -1,7 +1,7 @@
 {
   "dependencies": {
+    "babel-plugin-transform-decorators-legacy": "",
     "body-parser": "",
-    "coffeescript": "",
     "express": "",
     "moment": "",
     "nib": "",

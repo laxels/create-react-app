@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "babel-plugin-transform-decorators-legacy": "",
     "body-parser": "",
     "express": "",
     "moment": "",
